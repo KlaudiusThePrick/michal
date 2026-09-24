@@ -57,7 +57,37 @@
     </nav>
     <h1>niečo iné</h1>
     <h3>vec: výkaz pekných aj iných vecí </h3>
-    <p> volské oko so šunkou.
-    </p>
+    <div id="obsah">
+        <p><em>(načítavam ja.txt…)</em></p>
+    </div>
+
+    <script>
+        fetch("ja.txt")
+            .then(function (response) {
+                return response.text();
+            })
+            .then(function (text) {
+                var lines = text.split(/\r?\n/);
+                var html = "";
+
+for (var i = 0; i < lines.length; i++) {
+                    var line = lines[i];
+
+                    if (line.indexOf("## ") === 0) {
+                        html += "<h3>" + line.slice(3) + "</h3>\n";
+                    } else if (line.indexOf("# ") === 0) {
+                        html += "<h2>" + line.slice(2) + "</h2>\n";
+                    } else {
+                        html += "<p>" + line + "</p>\n";
+                    }
+                }
+
+document.getElementById("obsah").innerHTML = html;
+            })
+            .catch(function (err) {
+                document.getElementById("obsah").innerHTML =
+                    "<p><em>ja.txt sa nepodarilo načítať (funguje to len cez skutočný hosting, nie pri otvorení súboru priamo z disku).</em></p>";
+            });
+    </script>
 </body>
 </html>
