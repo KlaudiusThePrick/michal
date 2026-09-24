@@ -30,15 +30,20 @@
         text-decoration: underline;
         filter: brightness(1.2)
     }
-    .notovy-zapis {
-        margin: 1.5rem 0;
-        overflow-x: auto;
+    #obsah p {
+        margin: 0 0 0.4em;
     }
-    .notovy-zapis img {
-        width: 100;
-        max-width: 700px;
+    #obsah h2 {
+        margin: 1.2em 0 0.3em;
+    }
+    #obsah h3 {
+        margin: 1em 0 0.3em;
+    }
+    #obsah img {
+        max-width: 100%;
         height: auto;
         display: block;
+        margin: 1rem 0;
     }
     </style>
 </head>
@@ -51,22 +56,48 @@
         <a href="urbex.html">URBEX</a> |
         <a href="tkd.html">TAEKWON-DO</a> |
         <a href="music.html">HUDBA</a> |
-        <a href="hry.html">VIDEO HRY</a> |
-        <a href="ja.html">NIEČO INÉ</a> |
+        <a href="hry.html">VIDEOHRY</a> |
+        <a href="misc.html">NIEČO INÉ</a> |
         <a href="thx.html">POZDRAVUJEM</a>
     </nav>
     <h1>hudba</h1>
-    <h3></h3>
-    <p>
-    práve píšem zopár skladieb, ktoré ma inšpiroval skomponovať izraelský hudobník amitai kurtz. má skvelý zvuk. vďaka všetkým svojím doterajším vedomostiam o zápise mojich hudobných predstáv do nôt
-    a svojej odvahe sa do toho pustiť mám už niečo, čo znie celkom pekne. skladby majú pracovné názvy: vamos! alkohol in zurich, cloudy but fun. cieľom ich je spraviť peknú komornú a zároveň tanečnú hudbu
-    pre čo najjednoduchšie prevedenie. máme tam nejaké bubny, nejakú gitaru, nejaký saxofón altový a klarinet. ten saxík a klarík sú v podstate veľmi blízki súrodenci - až by sa dalo povedať, že ide o dvojvaječné
-    dvojčatá. ide len o zvukovú farbu. o efekt. nič viac. má to byť pop music. uvádzam zápis témy pre náhľad zo skladby vamos! prvých nejakých 8 taktov.<br>
-    synkopácia: existuje <br>
-    michal: *okamžite ju používa agresívne všade*
-    </p>
-    <div class="notovy-zapis">
-    <img src="vamos.svg" alt="Notový zápis: Vamos! (prvých 8 taktov)"></div>
-</div>
+    <h3>do tanca aj na počúvanie</h3>
+    <div id="obsah">
+        <p><em>text</em></p>
+    </div>
+
+    <script>
+        fetch("music.txt")
+            .then(function (response) {
+                return response.text();
+            })
+            .then(function (text) {
+                var lines = text.split(/\r?\n/);
+                var html = "";
+
+                for (var i = 0; i < lines.length; i++) {
+                    var line = lines[i];
+
+                    if (line.indexOf("## ") === 0) {
+                        html += "<h3>" + line.slice(3) + "</h3>\n";
+                    } else if (line.indexOf("# ") === 0) {
+                        html += "<h2>" + line.slice(2) + "</h2>\n";
+                    } else if (line.indexOf("foto ") === 0) {
+                        var subor = line.slice(5).trim();
+                        var alt = subor.replace(/\.[a-zA-Z0-9]+$/, "").replace(/[-_]/g, " ");
+                        html += '<img src="' + subor + '" alt="' + alt + '" loading="lazy">\n';
+                    } else {
+                        html += "<p>" + line + "</p>\n";
+                    }
+                }
+
+                document.getElementById("obsah").innerHTML = html;
+            })
+            .catch(function (err) {
+                document.getElementById("obsah").innerHTML =
+                    "<p><em>textový súbor sa nepodarilo načítať (funguje to len cez skutočný hosting, nie pri otvorení súboru priamo z disku).</em></p>";
+            });
+    </script>
+
 </body>
 </html>
