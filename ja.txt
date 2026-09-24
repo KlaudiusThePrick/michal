@@ -1,0 +1,9 @@
+# niečo iné
+
+Sem píšeš normálny text. Každý riadok sa sám stane vlastným odsekom, netreba pred neho písať žiadny <br>.
+
+Ďalší riadok pôjde pod predchádzajúci automaticky, presne takto.
+
+## menší podnadpis
+
+A tu pokračuje ďalší text pod podnadpisom, opäť úplne bežne, riadok po riadku.
