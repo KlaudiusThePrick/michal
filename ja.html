@@ -39,6 +39,12 @@
     #obsah h3 {
         margin: 1em 0 0.3em;
     }
+    #obsah img {
+        max-width: 100%;
+        height: auto;
+        display: block;
+        margin: 1rem 0;
+    }        
 
     </style>
 </head>
@@ -79,7 +85,12 @@ for (var i = 0; i < lines.length; i++) {
                         html += "<h2>" + line.slice(2) + "</h2>\n";
                     } else {
                         html += "<p>" + line + "</p>\n";
-                    }
+                    } else if (line.indexOf("foto ") === 0) {
+    var subor = line.slice(5).trim();
+    var alt = subor.replace(/\.[a-zA-Z0-9]+$/, "").replace(/[-_]/g, " ");
+    html += '<img src="' + subor + '" alt="' + alt + '" loading="lazy">\n';
+}
+                    
                 }
 
 document.getElementById("obsah").innerHTML = html;
