@@ -1,1 +1,4 @@
-
+    ig: @michal.poliak1
+    fb: Michal Poliak
+    email: klaudius@tutamail.com
+    telefónne číslo: +421 949 634 534
