@@ -97,6 +97,29 @@
                 document.getElementById("obsah").innerHTML =
                     "<p><em>textový súbor sa nepodarilo načítať (funguje to len cez skutočný hosting, nie pri otvorení súboru priamo z disku).</em></p>";
             });
+                    fetch("statusy.txt")
+            .then(function (response) {
+                return response.text();
+            })
+            .then(function (text) {
+                var lines = text.split(/\r?\n/).filter(function (line) {
+                    return line.trim() !== "";
+                });
+
+                lines.reverse(); // najnovší status (posledný riadok v súbore) hore
+
+                var html = "";
+                for (var i = 0; i < lines.length; i++) {
+                    html += "<p>" + lines[i] + "</p>\n";
+                }
+
+                document.getElementById("statusy").innerHTML =
+                    html || "<p><em>zatiaľ žiadne statusy.</em></p>";
+            })
+            .catch(function (err) {
+                document.getElementById("statusy").innerHTML =
+                    "<p><em>statusy.txt sa nepodarilo načítať.</em></p>";
+            });
     </script>
 
 </body>
