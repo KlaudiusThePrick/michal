@@ -30,6 +30,38 @@
         text-decoration: underline;
         filter: brightness(1.2)
     }
+    #obsah p {
+        margin: 0 0 0.4em;
+    }
+    #obsah h2 {
+        margin: 1.2em 0 0.3em;
+    }
+    #obsah h3 {
+        margin: 1em 0 0.3em;
+    }
+    #obsah img {
+        max-width: 100%;
+        height: auto;
+        display: block;
+        margin: 1rem 0;
+    }
+        /* --- NOVÉ: box s krátkymi statusmi --- */
+    .statusy-box {
+        max-height: 220px;
+        overflow-y: auto;
+        border: 1px solid #333a45;
+        border-radius: 4px;
+        padding: 0.75rem 1rem;
+        margin: 1.5rem 0;
+    }
+    .statusy-box p {
+        margin: 0 0 0.8em;
+        font-size: 0.95rem;
+    }
+    .statusy-box p:last-child {
+        margin-bottom: 0;
+    }
+    /* --- koniec novej časti --- */
 
     </style>
 </head>
@@ -42,25 +74,73 @@
         <a href="urbex.html">URBEX</a> |
         <a href="tkd.html">TAEKWON-DO</a> |
         <a href="music.html">HUDBA</a> |
-        <a href="hry.html">VIDEO HRY</a> |
-        <a href="ja.html">NIEČO INÉ</a> |
+        <a href="hry.html">VIDEOHRY</a> |
+        <a href="misc.html">NIEČO INÉ</a> |
         <a href="thx.html">POZDRAVUJEM</a>
     </nav>
     <h1>úvod</h1>
-    <h3>vec: oznámenie o obsahu </h3>
-    <p><br>...
-    <br>aj nič sa dá.
-    <br>gitara, učenie, tiché miesta, muzika do tanca aj na počúvanie, video hry, nejaké to bojové umenie a aj niečo iné niekde medzi tým všetkým.
-    <br>konečne pokoj. dovolil som si zostať stáť. nemám ambície. som. stačí.
-    <br>skúmam čo chcem robiť, keď nič nemusím.
-<br>
-    <br>všetky otázky smerujte na <a href="mailto:klaudius@tutamail.com"> klaudius@tutamail.com </a>
-<br>
-    <br>maj deň aký si zaslúžiš,
-<br>
-    <br>svoj,
-<br>
-    <br>michal
-    </p>
+    <h3>vec: oznámenie o obsahu</h3>
+    <div id="obsah">
+        <p><em>text</em></p>
+    </div>
+    <div id="statusy" class="statusy-box">
+        <p><em>(načítavam statusy.txt…)</em></p>
+    </div>
+    <script>
+        fetch("index.txt")
+            .then(function (response) {
+                return response.text();
+            })
+            .then(function (text) {
+                var lines = text.split(/\r?\n/);
+                var html = "";
+
+                for (var i = 0; i < lines.length; i++) {
+                    var line = lines[i];
+
+                    if (line.indexOf("## ") === 0) {
+                        html += "<h3>" + line.slice(3) + "</h3>\n";
+                    } else if (line.indexOf("# ") === 0) {
+                        html += "<h2>" + line.slice(2) + "</h2>\n";
+                    } else if (line.indexOf("foto ") === 0) {
+                        var subor = line.slice(5).trim();
+                        var alt = subor.replace(/\.[a-zA-Z0-9]+$/, "").replace(/[-_]/g, " ");
+                        html += '<img src="' + subor + '" alt="' + alt + '" loading="lazy">\n';
+                    } else {
+                        html += "<p>" + line + "</p>\n";
+                    }
+                }
+
+                document.getElementById("obsah").innerHTML = html;
+            })
+            .catch(function (err) {
+                document.getElementById("obsah").innerHTML =
+                    "<p><em>textový súbor sa nepodarilo načítať (funguje to len cez skutočný hosting, nie pri otvorení súboru priamo z disku).</em></p>";
+            });
+                    fetch("statusy.txt")
+            .then(function (response) {
+                return response.text();
+            })
+            .then(function (text) {
+                var lines = text.split(/\r?\n/).filter(function (line) {
+                    return line.trim() !== "";
+                });
+
+                lines.reverse(); // najnovší status (posledný riadok v súbore) hore
+
+                var html = "";
+                for (var i = 0; i < lines.length; i++) {
+                    html += "<p>" + lines[i] + "</p>\n";
+                }
+
+                document.getElementById("statusy").innerHTML =
+                    html || "<p><em>zatiaľ žiadne statusy.</em></p>";
+            })
+            .catch(function (err) {
+                document.getElementById("statusy").innerHTML =
+                    "<p><em>statusy.txt sa nepodarilo načítať.</em></p>";
+            });
+    </script>
+
 </body>
 </html>
