@@ -82,11 +82,19 @@
                         html += "<h3>" + line.slice(3) + "</h3>\n";
                     } else if (line.indexOf("# ") === 0) {
                         html += "<h2>" + line.slice(2) + "</h2>\n";
-                    } else if (line.indexOf("foto ") === 0) {
-                        var subor = line.slice(5).trim();
-                        var alt = subor.replace(/\.[a-zA-Z0-9]+$/, "").replace(/[-_]/g, " ");
-                        html += '<img src="' + subor + '" alt="' + alt + '" loading="lazy">\n';
-                    } else {
+                    } } else if (line.indexOf("foto ") === 0) {
+    var parts = line.slice(5).trim().split(/\s+/);
+    var subor = parts[0];
+    var sirka = parts[1];
+    var alt = subor.replace(/\.[a-zA-Z0-9]+$/, "").replace(/[-_]/g, " ");
+
+    var styleAttr = "";
+    if (sirka && /^\d+$/.test(sirka)) {
+        styleAttr = ' style="max-width:' + sirka + 'px"';
+    }
+
+    html += '<img src="' + subor + '" alt="' + alt + '" loading="lazy"' + styleAttr + '>\n';
+} else {
                         html += "<p>" + line + "</p>\n";
                     }
                 }
