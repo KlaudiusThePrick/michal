@@ -32,6 +32,7 @@
     }
     #obsah p {
         margin: 0 0 0.4em;
+        text-align: justify;
     }
     #obsah h2 {
         margin: 1.2em 0 0.3em;
@@ -44,6 +45,33 @@
         height: auto;
         display: block;
         margin: 1rem 0;
+    }
+    #obsah .zarovnat-vpravo{
+        text-align: right;
+    }
+    #obsah .zarovnat-vlavo{
+        text-align: left;
+    }
+    #obsah .zarovnat-stred{
+        text-align: center;
+    }
+    #obsah img.foto-stred {
+        margin-left: auto;
+        margin-right: auto;
+    }
+    #obsah .foto-vpravo {
+        margin-left: auto;
+        margin-right: 0;
+    }
+    #obsah .foto-cez {
+        width: 100vw;
+        position: relative;
+        left: 50%;
+        transform: translateX(-50%);
+        margin: 1rem 0;
+    }
+    #obsah .foto-cez img{
+        margin:0;
     }
     </style>
 </head>
@@ -85,16 +113,34 @@
                     } else if (line.indexOf("foto ") === 0) {
     var parts = line.slice(5).trim().split(/\s+/);
     var subor = parts[0];
-    var sirka = parts[1];
+    var druhy = parts[1];
+    var treti = parts[2];
     var alt = subor.replace(/\.[a-zA-Z0-9]+$/, "").replace(/[-_]/g, " ");
 
+    if (druhy === "cez") {
+        html += '<div class="foto-cez"><img src="' + subor + '" alt="' + alt + '" loading="lazy"></div>\n';
+    } else {                        
     var styleAttr = "";
-    if (sirka && /^\d+$/.test(sirka)) {
-        styleAttr = ' style="max-width:' + sirka + 'px"';
+    if (druhy && /^\d+$/.test(druhy)) {
+        styleAttr = ' style="max-width:' + druhy + 'px"';
+    }
+
+    var trieda = "";
+    if (treti === "stred") {
+        trieda = ' class="foto-stred"';
+    } else if (treti === "vpravo") {
+        trieda = ' class="foto-vpravo"';
     }
 
     html += '<img src="' + subor + '" alt="' + alt + '" loading="lazy"' + styleAttr + '>\n';
-}else {
+    } 
+} else if (line.indexOf("> ") === 0) {
+    html += '<p class="zarovnat-vpravo">' + line.slice(2) + '</p>\n';
+} else if (line.indexOf("< ") === 0) {
+    html += '<p class="zarovnat-vlavo">' + line.slice(2) + '</p>\n';
+} else if  (line.indexOf("| ") === 0) {
+    html += '<p class="zarovnat-stred">' + line.slice(2) + '</p>\n';
+}                    else {
                         html += "<p>" + line + "</p>\n";
                     }
                 }
