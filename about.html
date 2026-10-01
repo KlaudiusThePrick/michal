@@ -132,7 +132,7 @@
         trieda = ' class="foto-vpravo"';
     }
 
-    html += '<img src="' + subor + '" alt="' + alt + '" loading="lazy"' + styleAttr + trieda'>\n';
+    html += '<img src="' + subor + '" alt="' + alt + '" loading="lazy"' + styleAttr + trieda +'>\n';
     } 
 } else if (line.indexOf("> ") === 0) {
     html += '<p class="zarovnat-vpravo">' + line.slice(2) + '</p>\n';
