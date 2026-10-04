@@ -73,6 +73,7 @@
     #obsah .foto-cez img{
         margin:0;
     }
+
     /* --- galéria: miniatúry --- */
     #obsah .galeria {
         display: flex;
@@ -142,7 +143,7 @@
     <div id="obsah">
         <p><em>text</em></p>
     </div>
-    
+
     <div id="lightbox" class="lightbox">
         <button class="lb-zavriet" aria-label="zavrieť">✕</button>
         <button class="lb-prev" aria-label="predošlá">‹</button>
@@ -190,13 +191,14 @@
 
     html += '<img src="' + subor + '" alt="' + alt + '" loading="lazy"' + styleAttr + trieda + '>\n';
     } 
- else if (line.indexOf("galeria ") === 0) {
+} else if (line.indexOf("galeria ") === 0) {
     var subory = line.slice(8).trim().split(/\s+/);
     html += '<div class="galeria">';
     for (var j = 0; j < subory.length; j++) {
         var altG = subory[j].replace(/\.[a-zA-Z0-9]+$/, "").replace(/[-_]/g, " ");
         html += '<img src="' + subory[j] + '" alt="' + altG + '" loading="lazy">';
     }
+    html += '</div>\n';
 } else if (line.indexOf("> ") === 0) {
     html += '<p class="zarovnat-vpravo">' + line.slice(2) + '</p>\n';
 } else if (line.indexOf("< ") === 0) {
@@ -214,6 +216,7 @@
                 document.getElementById("obsah").innerHTML =
                     "<p><em>textový súbor sa nepodarilo načítať (funguje to len cez skutočný hosting, nie pri otvorení súboru priamo z disku).</em></p>";
             });
+
         /* --- galéria: prehliadač na celú obrazovku --- */
         var lightbox = document.getElementById("lightbox");
         var lbImg = document.getElementById("lb-img");
