@@ -1,3 +1,13 @@
+# testing galérie
+4.10.2026
+toto by malo fungovať tak, že keď niečo konkrétne napíšem, tak vznikne galéria, ktorá sa bude dať interaktívne prehliadať.
+ach neviem načo si to takto komplikujem... 
+veď by to mohol byť pekný a jednoduchý blog. miesto toho rýpem do kódu s pomocou ai a dúfam, že sa mi to nedo...kazí.
+inak vôbec ja a programovanie... je to ale ai-assisted programming. nie vibe-coding. 
+no tak poďme na to:
+galeria kamerka.jpg pan-chrob.webp ryba.jpg mertz.webp au-gitara.jpg
+no čo? funguje?
+
 # zdravo a lacno
 30.9.2026
 dostal som inštrukciu od doktorky jesť zdravo. veľa zeleniny atď... človek sa veľakrát zamyslí nad tým čo uvariť. sú podľa mňa dva typy ľudí. tí čo varia niečo chutné a tí, čo varia niečo. vlastne tri typy. tí z tretej kategórie nevaria. ani mne sa často nechce. hlavné jedlo, potom príloha, potom šalát, potom umývať každý hrniec... otras.
