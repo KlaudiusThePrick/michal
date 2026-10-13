@@ -1,0 +1,397 @@
+<!DOCTYPE html>
+<html lang="sk">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>michal</title>
+    <style>
+    /* ===== CELÁ STRÁNKA: menu hore, statusy pod ním, obsah vypĺňa zvyšok ===== */
+    body {
+        background-color: #1e2229;
+        color: #e2e8f0;
+        font-family: "Open Sans", sans-serif;
+        max-width: 700px;
+        margin: 0 auto;
+        padding: 0 1rem;
+        line-height: 1.6;
+        height: 100vh;
+        height: 100dvh;
+        display: flex;
+        flex-direction: column;
+        box-sizing: border-box;
+    }
+    br {
+        content: "";
+        margin-bottom: 10px;
+        display: block;
+    }
+    a {
+        color: #38bdf8;
+        text-decoration: none;
+        letter-spacing: 1.5px;
+    }
+    a:hover {
+        text-decoration: underline;
+        filter: brightness(1.2);
+    }
+    nav {
+        flex: none;
+        padding: 0.5rem 0;
+    }
+
+    /* ===== MALÝ BLOK so statusmi ===== */
+    #statusy {
+        flex: none;
+        max-height: 6rem;
+        overflow-y: auto;
+        overscroll-behavior: contain;
+        border: 1px solid #333a45;
+        border-radius: 4px;
+        padding: 0.4rem 0.8rem;
+        font-size: 0.85rem;
+        line-height: 1.5;
+    }
+    #statusy p {
+        margin: 0 0 0.4em;
+    }
+    #statusy p:last-child {
+        margin-bottom: 0;
+    }
+
+    /* ===== VEĽKÝ BLOK s obsahom rubriky (rolluje sa len on) ===== */
+    #obsah {
+        flex: 1;
+        min-height: 0;
+        overflow-y: auto;
+        overscroll-behavior: contain;
+        border: 1px solid #333a45;
+        border-radius: 4px;
+        padding: 0 1rem 1rem;
+        margin: 0.75rem 0;
+    }
+    #obsah:focus {
+        outline: none;
+    }
+    #obsah h1 {
+        margin: 0.7em 0 0.3em;
+    }
+    #obsah p {
+        margin: 0 0 0.4em;
+        text-align: justify;
+    }
+    #obsah h2 {
+        margin: 1.2em 0 0.3em;
+    }
+    #obsah h3 {
+        margin: 1em 0 0.3em;
+    }
+    #obsah img {
+        max-width: 100%;
+        height: auto;
+        display: block;
+        margin: 1rem 0;
+    }
+    #obsah .zarovnat-vpravo {
+        text-align: right;
+    }
+    #obsah .zarovnat-vlavo {
+        text-align: left;
+    }
+    #obsah .zarovnat-stred {
+        text-align: center;
+    }
+    #obsah img.foto-stred {
+        margin-left: auto;
+        margin-right: auto;
+    }
+    #obsah img.foto-vpravo {
+        margin-left: auto;
+        margin-right: 0;
+    }
+    /* "cez" = od okraja po okraj bloku (vyruší vnútorný odsadenie 1rem) */
+    #obsah .foto-cez {
+        margin: 1rem -1rem;
+    }
+    #obsah .foto-cez img {
+        width: 100%;
+        margin: 0;
+    }
+
+    /* ===== galéria: miniatúry ===== */
+    #obsah .galeria {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 6px;
+        margin: 1rem 0;
+    }
+    #obsah .galeria img {
+        width: 90px;
+        height: 90px;
+        object-fit: cover;
+        margin: 0;
+        cursor: pointer;
+    }
+
+    /* ===== galéria: celá obrazovka ===== */
+    .lightbox {
+        display: none;
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background: rgba(0, 0, 0, 0.95);
+        z-index: 1000;
+        align-items: center;
+        justify-content: center;
+    }
+    .lightbox.otvorene {
+        display: flex;
+    }
+    .lightbox img {
+        max-width: 100%;
+        max-height: 100%;
+        object-fit: contain;
+    }
+    .lightbox button {
+        position: absolute;
+        background: none;
+        border: none;
+        color: #e2e8f0;
+        font-size: 2.5rem;
+        cursor: pointer;
+        padding: 0.5rem 1rem;
+        line-height: 1;
+    }
+    .lb-zavriet { top: 0; right: 0; }
+    .lb-prev { left: 0; top: 50%; transform: translateY(-50%); }
+    .lb-next { right: 0; top: 50%; transform: translateY(-50%); }
+    </style>
+</head>
+<body>
+    <nav>
+        <a href="#index">ÚVOD</a> |
+        <a href="#cont">KONTAKT</a> |
+        <a href="#about">O MNE</a> |
+        <a href="#guitar">GITARA</a> |
+        <a href="#urbex">URBEX</a> |
+        <a href="#tkd">TAEKWON-DO</a> |
+        <a href="#music">HUDBA</a> |
+        <a href="#hry">VIDEOHRY</a> |
+        <a href="#misc">NIEČO INÉ</a> |
+        <a href="#thx">POZDRAVUJEM</a>
+    </nav>
+
+    <div id="statusy">
+        <p><em>(načítavam statusy…)</em></p>
+    </div>
+
+    <div id="obsah" tabindex="-1">
+        <p><em>(načítavam…)</em></p>
+    </div>
+
+    <div id="lightbox" class="lightbox">
+        <button class="lb-zavriet" aria-label="zavrieť">✕</button>
+        <button class="lb-prev" aria-label="predošlá">‹</button>
+        <img id="lb-img" alt="">
+        <button class="lb-next" aria-label="ďalšia">›</button>
+    </div>
+
+    <script>
+        /* ===== 1. PARSER: zmení text z .txt na HTML (pravidlá ako doteraz) ===== */
+        function spracujTxt(text) {
+            var lines = text.split(/\r?\n/);
+            var html = "";
+
+            for (var i = 0; i < lines.length; i++) {
+                var line = lines[i];
+
+                if (line.indexOf("## ") === 0) {
+                    html += "<h3>" + line.slice(3) + "</h3>\n";
+                } else if (line.indexOf("# ") === 0) {
+                    html += "<h2>" + line.slice(2) + "</h2>\n";
+                } else if (line.indexOf("foto ") === 0) {
+                    var parts = line.slice(5).trim().split(/\s+/);
+                    var subor = parts[0];
+                    var druhy = parts[1];   // šírka (číslo) ALEBO "cez"
+                    var treti = parts[2];   // "stred" / "vpravo"
+                    var alt = subor.replace(/\.[a-zA-Z0-9]+$/, "").replace(/[-_]/g, " ");
+
+                    if (druhy === "cez") {
+                        html += '<div class="foto-cez"><img src="' + subor + '" alt="' + alt + '" loading="lazy"></div>\n';
+                    } else {
+                        var styleAttr = "";
+                        if (druhy && /^\d+$/.test(druhy)) {
+                            styleAttr = ' style="max-width:' + druhy + 'px"';
+                        }
+
+                        var trieda = "";
+                        if (treti === "stred") {
+                            trieda = ' class="foto-stred"';
+                        } else if (treti === "vpravo") {
+                            trieda = ' class="foto-vpravo"';
+                        }
+
+                        html += '<img src="' + subor + '" alt="' + alt + '" loading="lazy"' + styleAttr + trieda + '>\n';
+                    }
+                } else if (line.indexOf("galeria ") === 0) {
+                    var subory = line.slice(8).trim().split(/\s+/);
+                    html += '<div class="galeria">';
+                    for (var j = 0; j < subory.length; j++) {
+                        var altG = subory[j].replace(/\.[a-zA-Z0-9]+$/, "").replace(/[-_]/g, " ");
+                        html += '<img src="' + subory[j] + '" alt="' + altG + '" loading="lazy">';
+                    }
+                    html += '</div>\n';
+                } else if (line.indexOf("> ") === 0) {
+                    html += '<p class="zarovnat-vpravo">' + line.slice(2) + '</p>\n';
+                } else if (line.indexOf("< ") === 0) {
+                    html += '<p class="zarovnat-vlavo">' + line.slice(2) + '</p>\n';
+                } else if (line.indexOf("| ") === 0) {
+                    html += '<p class="zarovnat-stred">' + line.slice(2) + '</p>\n';
+                } else {
+                    html += "<p>" + line + "</p>\n";
+                }
+            }
+            return html;
+        }
+
+        /* ===== 2. NAČÍTANIE RUBRIKY podľa odkazu v adrese (#urbex -> urbex.txt) ===== */
+        var obsah = document.getElementById("obsah");
+        var poradie = 0;   // číslo posledného kliknutia (aby pomalá odpoveď neprepísala novšiu)
+
+        function nacitajRubriku() {
+            var id = location.hash.slice(1) || "index";
+
+            // bezpečnosť: povolené len písmená, čísla, pomlčka, podčiarkovník
+            if (!/^[a-z0-9_-]+$/i.test(id)) {
+                id = "index";
+            }
+
+            poradie++;
+            var moje = poradie;
+
+            // nadpis h1 = text z menu, malými písmenami
+            var odkaz = document.querySelector('nav a[href="#' + id + '"]');
+            var nadpis = odkaz ? odkaz.textContent.toLowerCase() : id;
+            document.title = nadpis + " – michal";
+
+            obsah.innerHTML = "<h1>" + nadpis + "</h1><p><em>(načítavam…)</em></p>";
+
+            fetch(id + ".txt")
+                .then(function (response) {
+                    if (!response.ok) {
+                        throw new Error("HTTP " + response.status);
+                    }
+                    return response.text();
+                })
+                .then(function (text) {
+                    if (moje !== poradie) return;   // medzitým sa kliklo inam
+                    obsah.innerHTML = "<h1>" + nadpis + "</h1>\n" + spracujTxt(text);
+                    obsah.scrollTop = 0;
+                    obsah.focus({ preventScroll: true });
+                })
+                .catch(function (err) {
+                    if (moje !== poradie) return;
+                    obsah.innerHTML = "<h1>" + nadpis + "</h1><p><em>" + id +
+                        ".txt sa nepodarilo načítať (súbor ešte neexistuje, alebo to nejde cez skutočný hosting, ale priamo z disku).</em></p>";
+                });
+        }
+
+        window.addEventListener("hashchange", nacitajRubriku);
+        nacitajRubriku();
+
+        /* ===== 3. STATUSY (obyčajný text, každý riadok jeden status, najnovší dole v súbore) ===== */
+        fetch("statusy.txt")
+            .then(function (response) {
+                if (!response.ok) {
+                    throw new Error("HTTP " + response.status);
+                }
+                return response.text();
+            })
+            .then(function (text) {
+                var lines = text.split(/\r?\n/).filter(function (line) {
+                    return line.trim() !== "";
+                });
+                lines.reverse();   // najnovší (posledný riadok) hore
+
+                var html = "";
+                for (var i = 0; i < lines.length; i++) {
+                    html += "<p>" + lines[i] + "</p>\n";
+                }
+                document.getElementById("statusy").innerHTML =
+                    html || "<p><em>zatiaľ žiadne statusy.</em></p>";
+            })
+            .catch(function (err) {
+                document.getElementById("statusy").innerHTML =
+                    "<p><em>statusy.txt sa nepodarilo načítať.</em></p>";
+            });
+
+        /* ===== 4. GALÉRIA: prehliadač na celú obrazovku ===== */
+        var lightbox = document.getElementById("lightbox");
+        var lbImg = document.getElementById("lb-img");
+        var aktualneFotky = [];
+        var aktualny = 0;
+
+        function ukazFotku() {
+            lbImg.src = aktualneFotky[aktualny].src;
+            lbImg.alt = aktualneFotky[aktualny].alt;
+        }
+        function otvor(fotky, index) {
+            aktualneFotky = fotky;
+            aktualny = index;
+            ukazFotku();
+            lightbox.classList.add("otvorene");
+        }
+        function zavri() {
+            lightbox.classList.remove("otvorene");
+            lbImg.removeAttribute("src");
+        }
+        function dalsia() {
+            aktualny = (aktualny + 1) % aktualneFotky.length;
+            ukazFotku();
+        }
+        function predosla() {
+            aktualny = (aktualny - 1 + aktualneFotky.length) % aktualneFotky.length;
+            ukazFotku();
+        }
+
+        // klik na miniatúru (funguje aj na fotky, ktoré sa načítajú neskôr)
+        document.addEventListener("click", function (e) {
+            var mini = e.target.closest(".galeria img");
+            if (!mini) return;
+            var vsetky = Array.prototype.slice.call(mini.parentNode.querySelectorAll("img"));
+            otvor(vsetky, vsetky.indexOf(mini));
+        });
+
+        // tlačidlá a klik mimo fotky
+        lightbox.addEventListener("click", function (e) {
+            if (e.target.classList.contains("lb-prev")) {
+                predosla();
+            } else if (e.target.classList.contains("lb-next")) {
+                dalsia();
+            } else if (e.target !== lbImg) {
+                zavri();
+            }
+        });
+
+        // klávesnica
+        document.addEventListener("keydown", function (e) {
+            if (!lightbox.classList.contains("otvorene")) return;
+            if (e.key === "ArrowRight") dalsia();
+            if (e.key === "ArrowLeft") predosla();
+            if (e.key === "Escape") zavri();
+        });
+
+        // potiahnutie prstom
+        var dotykX = 0;
+        lightbox.addEventListener("touchstart", function (e) {
+            dotykX = e.changedTouches[0].clientX;
+        });
+        lightbox.addEventListener("touchend", function (e) {
+            var rozdiel = e.changedTouches[0].clientX - dotykX;
+            if (rozdiel > 50) predosla();
+            if (rozdiel < -50) dalsia();
+        });
+    </script>
+</body>
+</html>
